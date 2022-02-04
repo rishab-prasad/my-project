@@ -1,0 +1,14 @@
+name: CI Workflow
+on: push
+jobs:
+  build-project:
+    runs-on: ubuntu-latest
+    Steps:
+      - name: Checkout Code
+        run: git clone ${{github.repositoryUrl}} repository
+
+      - name: Checkout branch
+        run: cd repository && git checkout ${{github.ref}}
+
+      - name: Build Project
+        run: cd repository && ./mvnw package
