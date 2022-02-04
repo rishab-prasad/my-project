@@ -7,5 +7,8 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v2
 
+      - name: List Files
+        run: ls -alrt
+
       - name: Build Project
-        run: cd repository && ./mvnw package
+        run: ./mvnw package
