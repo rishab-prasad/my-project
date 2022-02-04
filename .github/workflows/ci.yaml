@@ -5,10 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        run: git clone ${{github.repositoryUrl}} repository
-
-      - name: Checkout branch
-        run: cd repository && git checkout ${{github.ref}}
+        uses: actions/checkout@v2
 
       - name: Build Project
         run: cd repository && ./mvnw package
