@@ -3,7 +3,7 @@ on: push
 jobs:
   build-project:
     runs-on: ubuntu-latest
-    Steps:
+    steps:
       - name: Checkout Code
         run: git clone ${{github.repositoryUrl}} repository
 
