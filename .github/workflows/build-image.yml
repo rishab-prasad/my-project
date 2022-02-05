@@ -15,7 +15,7 @@ jobs:
         run: ./mvnw package
 
       - name: Build image
-        run: docker build -f src/main/docker/Dockerfile.jvm -t my-project .
+        run: docker build -f src/main/docker/Dockerfile.jvm -t rishabprasad005/my-project .
 
       - name: List images
         run: docker images
