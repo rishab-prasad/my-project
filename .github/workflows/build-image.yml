@@ -1,0 +1,28 @@
+name: image build workflow
+on:
+  workflow_dispatch
+jobs:
+  build-project:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: List Files
+        run: ls -alrt
+
+      - name: Build Project
+        run: ./mvnw package
+
+      - name: Build image
+        run: docker build -f src/main/docker/Dockerfile.jvm -t my-project .
+
+      - name: List images
+        run: docker images
+
+      - name: Login in dockerhub
+        run: docker login -u "${{secrets.DOCKERHUB_USERNAME}}"  -p "{{secrets.DOCKERHUB_PASSWORD}}" docker.io
+
+      - name: Push Images
+        run: docker push my-project      
+
