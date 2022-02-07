@@ -20,8 +20,13 @@ jobs:
         
   build-image:
     runs-on: ubuntu-latest
-    if: ${{github.event_name == 'push'}} && ${{github.ref == 'refs/heads/master'}}
+    if: github.event_name == 'push' && github.ref == 'refs/heads/xyz'
     steps:
+      - name: Print Context info
+        run: |
+          echo ${{github.event_name}}
+          echo ${{github.ref}}       
+     
       - name: Checkout Code
         uses: actions/checkout@v2
 
