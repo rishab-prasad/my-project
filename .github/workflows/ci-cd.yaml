@@ -38,3 +38,12 @@ jobs:
       - name: Push Images
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         run: docker push rishabprasad005/my-project
+        
+      - name: Google Chat Notification
+        uses: Co-qn/google-chat-notification@releases/v1
+        if: always()
+        with:
+          name: ${{github.workflow}}
+          url: ${{ secrets.GCHAT_WEBHOOK }}
+          status: ${{ job.status }}
+        
