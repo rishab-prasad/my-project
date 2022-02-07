@@ -18,32 +18,23 @@ jobs:
       - name: Build Project
         run: ./mvnw package
         
-  build-image:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/xyz'
-    steps:
-      - name: Print Context info
+      - name: print Context info
         run: |
-          echo ${{github.event_name}}
-          echo ${{github.ref}}       
-     
-      - name: Checkout Code
-        uses: actions/checkout@v2
-
-      - name: List Files
-        run: ls -alrt
-
-      - name: Build Project
-        run: ./mvnw package
-        
+         echo ${{github.event_name}}
+         echo ${{github.ref}}
+            
       - name: Build image
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         run: docker build -f src/main/docker/Dockerfile.jvm -t rishabprasad005/my-project .
 
       - name: List images
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         run: docker images
 
       - name: Login in dockerhub
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         run: docker login -u "${{secrets.DOCKERHUB_USERNAME}}"  -p "${{secrets.DOCKERHUB_PASSWORD}}" docker.io
 
       - name: Push Images
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         run: docker push rishabprasad005/my-project
