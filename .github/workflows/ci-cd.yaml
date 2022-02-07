@@ -16,21 +16,26 @@ jobs:
         run: ls -alrt
 
       - name: Build Project
-        run: ./mvnw package        
+        run: ./mvnw package
+        
+      - name: print Context info
+        run: |
+         echo ${{github.event_name}}
+         echo ${{github.ref}}
             
       - name: Build image
-        if: ${{github.event_name == 'push'}} && ${{github.ref == 'refs/heads/master'}}
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         run: docker build -f src/main/docker/Dockerfile.jvm -t rishabprasad005/my-project .
 
       - name: List images
-        if: ${{github.event_name == 'push'}} && ${{github.ref == 'refs/heads/master'}}
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         run: docker images
 
       - name: Login in dockerhub
-        if: ${{github.event_name == 'push'}} && ${{github.ref == 'refs/heads/master'}}
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         run: docker login -u "${{secrets.DOCKERHUB_USERNAME}}"  -p "${{secrets.DOCKERHUB_PASSWORD}}" docker.io
 
       - name: Push Images
-        if: ${{github.event_name == 'push'}} && ${{github.ref == 'refs/heads/master'}}
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         run: docker push rishabprasad005/my-project
         
