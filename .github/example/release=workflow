@@ -1,0 +1,29 @@
+Workflow should get triggered via workflow_disptach event, and I should be able to provide the belwo 3 values:-
+1. Release version
+2. Next Snaphot Version
+3. Branch from which the release should be done
+
+
+Maven Command to change the project version
+mvn versions:set -DnewVersion=<give-version-here> -DgenerateBackupPoms=false -DprocessAllModules=true
+
+Use below secrets:-
+1. Github Access token: ACCESS_TOKEN
+2. Dockerhub username: DOCKERHUB_USERNAME
+3. Dockerhub password: DOCKERHUB_PASSWORD
+4. Gchat Webhook URL: GCHAT_WEBHOOK
+
+
+TODO: Learn about Git tags. Understand the difference between git tags and git branches
+
+Step 1: Clone the repository
+Step 2: Change the project version from current SNAPSHOT version to ${{RELEASE_VERSION}}
+Step 3: Build the project to verify the project has no issues
+Step 4: Create a git tag with the ${{RELEASE_VERSION}} name
+Step 5: Push the created tag to the github repository
+Step 6: Commit and push the release version change you did in step 2
+Step 7: Build the docker image with tag ${{RELEASE_VERSION}}
+Step 8: Push the docker image to dockerhub
+step 9: Change the project version from ${{RELEASE_VERSION}} to ${{SNAPSHOT_VERSION}}
+step 10: Commit and push the snapshot version change you did in step 9
+step 11: Send a notification to gchat channel 
