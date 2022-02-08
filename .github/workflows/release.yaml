@@ -1,0 +1,44 @@
+name: release workflow
+on:
+  workflow_dispatch
+jobs:
+  release-project:
+    runs-on: ubuntu-latest
+    steps:
+       - name: clone the repository
+         uses: git clone git@github.com:rishab-prasad/my-project.git
+
+       - name: change the repository version
+         run:  set -DnewVersion =${{RELEASE_VERSION}} -DgenerateBackupPoms=false -DDprocessAllModules=true
+
+       - name: build the project 
+         run: ./mvnw package
+
+       - name: Create a git tag to the github repository
+         run: |
+               git config user.name "$GIT_USERNAME" && git config user.email "$GIT_EMAIL"
+               git tag -a "$RELEASE_VERSION" -m "Release $RELEASE_VERSION created by @$GITHUB_ACTOR"
+
+       - name: Login in dockerhub
+         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+         run: docker login -u "${{secrets.DOCKERHUB_USERNAME}}"  -p "${{secrets.DOCKERHUB_PASSWORD}}" docker.io
+
+       - name: Push Images
+         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+         run: docker push rishabprasad005/my-project
+
+       - name: change the repository version
+         run:  set -DnewVersion =${{SNAPSHOT_VERSION}} -DgenerateBackupPoms=false -DDprocessAllModules=true
+
+        
+       - name: Push Images
+         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+         run: docker push rishabprasad005/my-project
+
+       - name: Google Chat Notification
+         uses: Co-qn/google-chat-notification@releases/v1
+         if: always()
+         with:
+          name: ${{github.workflow}}
+          url: ${{ secrets.GCHAT_WEBHOOK }}
+          status: ${{ job.status }}
