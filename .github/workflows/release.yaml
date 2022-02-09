@@ -17,7 +17,7 @@ jobs:
   release-project:
     runs-on: ubuntu-latest
     steps:
-      - name: Release workflow
+       - name: Release workflow
         run: |
           git init
           git config --global user.name "rishab-prasad"
