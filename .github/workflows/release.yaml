@@ -18,10 +18,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
        - name: Release workflow
-        run: |
+         run: |
           git init
           git config --global user.name "rishab-prasad"
           git config --global user.email "rishabprasad05@gmail.com"
+          git remote add origin "https://rishab-prasad:${{ secrets.ACCESS_TOKEN }}@github.com/$GITHUB_REPOSITORY.git"
          
        - name: clone the repository
          run: git clone https://github.com/rishab-prasad/my-project.git
