@@ -17,6 +17,12 @@ jobs:
   release-project:
     runs-on: ubuntu-latest
     steps:
+      - name: Release workflow
+        run: |
+          git init
+          git config --global user.name "rishab-prasad"
+          git config --global user.email "rishabprasad05@gmail.com"
+         
        - name: clone the repository
          run: git clone https://github.com/rishab-prasad/my-project.git
 
@@ -41,9 +47,14 @@ jobs:
          run: |
           git add .
           git commit -m "Automated version update: ${{ RELEASE_VERSION}}"
-          git push
+          
+
+        - name: Login in dockerhub
+          run: docker login -u "${{secrets.DOCKERHUB_USERNAME}}"  -p "${{secrets.DOCKERHUB_PASSWORD}}" docker.io
 
 
+        - name: Push Images
+          run: docker push rishabprasad005/my-project    
 
 
          
