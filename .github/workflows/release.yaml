@@ -29,8 +29,8 @@ jobs:
        - name: check maven version 
          run:  mvn --version
 
-       - name: Update Release Version ${{ github.event.inputs.release-version}}
-         run: mvn versions:set -DnewVersion=${{ github.event.inputs.release-version}} -DgenerateBackupPoms=false -DprocessAllModules=true
+       - name: Update Release Version 
+         run: mvn versions:set -DnewVersion=${{RELASE_VERSION}} -DgenerateBackupPoms=false -DprocessAllModules=true
 
 
        - name: Verify Build
@@ -40,7 +40,7 @@ jobs:
        - name: Commit Release Version Change
          run: |
           git add .
-          git commit -m "Automated version update: ${{ github.event.inputs.release-version}}"
+          git commit -m "Automated version update: ${{ RELEASE_VERSION}}"
           git push
 
 
