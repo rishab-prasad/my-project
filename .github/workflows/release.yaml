@@ -1,53 +1,52 @@
 name: release workflow
 on:
-  workflow_dispatch:
+    workflow_dispatch:
     inputs:
-      ref:
-        description: 'Github Ref'
-        required: false
+      release-version:
+        description: 'Version being released'
+        required: true
+      snapshot-version:
+        description: 'Next snapshot version'
+        required: true
+      branch:
+        description: 'Branch to release from'
+        required: true
         default: 'main'
+  
 jobs:
   release-project:
     runs-on: ubuntu-latest
     steps:
        - name: clone the repository
-         run: git clone git@github.com:rishab-prasad/my-project.git
+         run: git clone https://github.com/rishab-prasad/my-project.git
 
-       
-       - checkout
-       - run:
-          name: get new version
-          command: |
-            NEW_VERSION=${{RELEASE_VERSION}}
-            echo $NEW_VERSION
-       - name: build the project 
-         run: ./mvnw package
+       - name:  make a new branch 
+         run: git branch branch2
 
-       - name: Create a git tag to the github repository
+       - name: Checkout 
+         run: git checkout branch2
+
+       - name: check maven version 
+         run:  mvn --version
+
+       - name: Update Release Version ${{ github.event.inputs.release-version}}
+         run: mvn versions:set -DnewVersion=${{ github.event.inputs.release-version}} -DgenerateBackupPoms=false -DprocessAllModules=true
+
+
+       - name: Verify Build
+         run:  mvn clean install
+
+
+       - name: Commit Release Version Change
          run: |
-               git config user.name "$GIT_USERNAME" && git config user.password "$GIT_PASSWORD"
-               git tag -a "$RELEASE_VERSION" -m "Release $RELEASE_VERSION created by @$GITHUB_ACTOR"
+          git add .
+          git commit -m "Automated version update: ${{ github.event.inputs.release-version}}"
+          git push
 
-       - name: Login in dockerhub
-         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-         run: docker login -u "${{secrets.DOCKERHUB_USERNAME}}"  -p "${{secrets.DOCKERHUB_PASSWORD}}" docker.io
 
-       - name: Push release version
-         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-         run: docker push rishabprasad005/my-project
 
-       - name: change the repository version
-         run:  set -DnewVersion =${{SNAPSHOT_VERSION}} -DgenerateBackupPoms=false -DDprocessAllModules=true
 
-        
-       - name: Push Snapshot Version
-         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-         run: docker push rishabprasad005/my-project
-
-       - name: Google Chat Notification
-         uses: Co-qn/google-chat-notification@releases/v1
-         if: always()
-         with:
-          name: ${{github.workflow}}
-          url: ${{ secrets.GCHAT_WEBHOOK }}
-          status: ${{ job.status }}
+         
+       
+ 
+ 
