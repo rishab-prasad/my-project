@@ -1,6 +1,11 @@
 name: release workflow
 on:
-  workflow_dispatch
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'Github Ref'
+        required: false
+        default: 'main'
 jobs:
   release-project:
     runs-on: ubuntu-latest
