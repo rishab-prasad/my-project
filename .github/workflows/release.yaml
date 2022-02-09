@@ -23,15 +23,9 @@ jobs:
           git config --global user.name "rishab-prasad"
           git config --global user.email "rishabprasad05@gmail.com"
           git remote add origin "https://rishab-prasad:${{ secrets.ACCESS_TOKEN }}@github.com/$GITHUB_REPOSITORY.git"
-         
-       - name: clone the repository
-         run: git clone https://github.com/rishab-prasad/my-project.git
-
-       - name:  make a new branch 
-         run: git branch branch2
-
-       - name: Checkout 
-         run: git checkout branch2
+          git fetch
+          git pull
+          find .
 
        - name: check maven version 
          run:  mvn --version
