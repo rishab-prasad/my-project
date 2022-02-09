@@ -16,14 +16,14 @@ jobs:
 
        - name: Create a git tag to the github repository
          run: |
-               git config user.name "$GIT_USERNAME" && git config user.email "$GIT_EMAIL"
+               git config user.name "$GIT_USERNAME" && git config user.password "$GIT_PASSWORD"
                git tag -a "$RELEASE_VERSION" -m "Release $RELEASE_VERSION created by @$GITHUB_ACTOR"
 
        - name: Login in dockerhub
          if: github.event_name == 'push' && github.ref == 'refs/heads/master'
          run: docker login -u "${{secrets.DOCKERHUB_USERNAME}}"  -p "${{secrets.DOCKERHUB_PASSWORD}}" docker.io
 
-       - name: Push Images
+       - name: Push release version
          if: github.event_name == 'push' && github.ref == 'refs/heads/master'
          run: docker push rishabprasad005/my-project
 
