@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
        - name: Release workflow
-        run: |
+         run: |
           git init
           git config --global user.name "rishab-prasad"
           git config --global user.email "rishabprasad05@gmail.com"
