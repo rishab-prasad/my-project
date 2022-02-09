@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
        - name: clone the repository
-         uses: git clone git@github.com:rishab-prasad/my-project.git
+         run: git clone git@github.com:rishab-prasad/my-project.git
 
        - name: change the repository version
          run:  set -DnewVersion =${{RELEASE_VERSION}} -DgenerateBackupPoms=false -DDprocessAllModules=true
@@ -31,7 +31,7 @@ jobs:
          run:  set -DnewVersion =${{SNAPSHOT_VERSION}} -DgenerateBackupPoms=false -DDprocessAllModules=true
 
         
-       - name: Push Images
+       - name: Push Snapshot Version
          if: github.event_name == 'push' && github.ref == 'refs/heads/master'
          run: docker push rishabprasad005/my-project
 
