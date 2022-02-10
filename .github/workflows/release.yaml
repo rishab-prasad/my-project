@@ -1,14 +1,14 @@
 name: release workflow
 on:
     workflow_dispatch:
-    inputs:
-      release-version:
+     inputs:
+      RELEASE_VERSION:
         description: 'Version being released'
         required: true
-      snapshot-version:
+      SNAPSHOT_VERSION:
         description: 'Next snapshot version'
         required: true
-      branch:
+      BRANCH:
         description: 'Branch to release from'
         required: true
         default: 'main'
@@ -17,9 +17,8 @@ jobs:
   release-project:
     runs-on: ubuntu-latest
     steps:
-       - name: Release workflow
+       - name: Checkout code
          run: |
-          git clone https://github.com/rishab-prasad/my-project.git
           git config --global user.name "rishab-prasad"
           git config --global user.email "rishabprasad05@gmail.com"
           git remote add origin "https://rishab-prasad:${{ secrets.ACCESS_TOKEN }}@github.com/$GITHUB_REPOSITORY.git"
@@ -27,29 +26,29 @@ jobs:
           git pull
           find .
 
-       - name: check maven version 
-         run:  mvn --version
-
        - name: Update Release Version 
-         run: mvn versions:set -DnewVersion=${{RELASE_VERSION}} -DgenerateBackupPoms=false -DprocessAllModules=true
-
-
+         run: ./mvnw versions:set -DnewVersion=${{github.events.input.RELEASE_VERSION}} -DgenerateBackupPoms=false -DprocessAllModules=true
+     
        - name: Verify Build
-         run:  mvn clean install
+         run: ./mvnw clean install
 
+       - name: Create a git tag to the github repository
+         run: git tag -a "${{github.events.input.RELEASE_VERSION}}" -m "Release ${{github.events.input.RELEASE_VERSION}} created by @$GITHUB_ACTOR"
+ 
+       - name: Push tag ${{github.events.input.RELEASE_VERSION}}
+         run: git push origin ${{github.events.input.RELEASE_VERSION}} 
 
-       - name: Commit Release Version Change
-         run: |
-          git add .
-          git commit -m "Automated version update: ${{ RELEASE_VERSION}}"
+      # - name: Commit Release Version Change
+       #  run: |
+        #  git add .
+         # git commit -m "Automated version update: ${{github.events.input.RELEASE_VERSION}}"
           
+  #      - name: Login in dockerhub
+   #       run: docker login -u "${{secrets.DOCKERHUB_USERNAME}}"  -p "${{secrets.DOCKERHUB_PASSWORD}}" docker.io
+#
 
-        - name: Login in dockerhub
-          run: docker login -u "${{secrets.DOCKERHUB_USERNAME}}"  -p "${{secrets.DOCKERHUB_PASSWORD}}" docker.io
-
-
-        - name: Push Images
-          run: docker push rishabprasad005/my-project    
+ #       - name: Push Images
+  #        run: docker push rishabprasad005/my-project    
 
 
          
