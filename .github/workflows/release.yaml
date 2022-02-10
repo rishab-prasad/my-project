@@ -11,7 +11,7 @@ on:
       BRANCH:
         description: 'Branch to release from'
         required: true
-        default: 'main'
+        default: 'master'
   
 jobs:
   release-project:
@@ -22,8 +22,8 @@ jobs:
           git config --global user.name "rishab-prasad"
           git config --global user.email "rishabprasad05@gmail.com"
           git remote add origin "https://rishab-prasad:${{ secrets.ACCESS_TOKEN }}@github.com/$GITHUB_REPOSITORY.git"
-          git fetch
-          git pull
+          git fetch origin
+          git pull origin $${{github.events.input.BRANCH}}
           find .
 
        - name: Update Release Version 
