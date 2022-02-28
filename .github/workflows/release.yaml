@@ -17,14 +17,18 @@ jobs:
   release-project:
     runs-on: ubuntu-latest
     steps:
-       - name: Checkout code
+       - name: Configure Git
          run: |
           git config --global user.name "rishab-prasad"
           git config --global user.email "rishabprasad05@gmail.com"
-          git remote add origin "https://rishab-prasad:${{ secrets.ACCESS_TOKEN }}@github.com/$GITHUB_REPOSITORY.git"
-          git fetch origin
-          git pull origin $${{github.events.input.BRANCH}}
-          find .
+          
+       - name: Checkout Code 
+         uses: actions/checkout@v2
+         with:
+           token: ${{ secrets.ACCESS_TOKEN }}
+           
+       - name: list files
+         run: ls -lrt
 
        - name: Update Release Version 
          run: ./mvnw versions:set -DnewVersion=${{github.events.input.RELEASE_VERSION}} -DgenerateBackupPoms=false -DprocessAllModules=true
