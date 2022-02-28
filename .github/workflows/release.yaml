@@ -27,16 +27,15 @@ jobs:
          with:
            ref: ${{github.events.inputs.BRANCH}}
            token: ${{ secrets.ACCESS_TOKEN }}
-           path: code
            
        - name: list files
          run: ls -lrt
 
        - name: Update Release Version 
-         run: cd code && ./mvnw versions:set -DnewVersion=${{github.events.inputs.RELEASE_VERSION}} -DgenerateBackupPoms=false -DprocessAllModules=true
+         run: ./mvnw versions:set -DnewVersion=${{github.events.inputs.RELEASE_VERSION}} -DgenerateBackupPoms=false -DprocessAllModules=true
      
        - name: Verify Build
-         run: cd code && ./mvnw clean install
+         run: ./mvnw clean install
          
        - name: Commit Release Version Change
          run: |
@@ -45,10 +44,10 @@ jobs:
           git push origin ${{github.events.inputs.BRANCH}}
 
        - name: Create a git tag to the github repository
-         run: cd code && git tag -a "${{github.events.inputs.RELEASE_VERSION}}" -m "Release ${{github.events.inputs.RELEASE_VERSION}} created by @$GITHUB_ACTOR"
+         run: git tag -a "${{github.events.inputs.RELEASE_VERSION}}" -m "Release ${{github.events.inputs.RELEASE_VERSION}} created by @$GITHUB_ACTOR"
  
        - name: Push tag ${{github.events.inputs.RELEASE_VERSION}}
-         run: cd code && git push origin ${{github.events.inputs.RELEASE_VERSION}} 
+         run: git push origin ${{github.events.inputs.RELEASE_VERSION}} 
 
 
          
