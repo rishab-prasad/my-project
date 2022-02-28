@@ -22,17 +22,17 @@ jobs:
           git config --global user.name "rishab-prasad"
           git config --global user.email "rishabprasad05@gmail.com"
           
-       - name: Checkout Code 
+       - name: Checkout Code with Ref ${{github.event.inputs.BRANCH}}
          uses: actions/checkout@v2
          with:
-           ref: ${{github.events.inputs.BRANCH}}
+           ref: ${{github.event.inputs.BRANCH}}
            token: ${{ secrets.ACCESS_TOKEN }}
            
        - name: list files
          run: ls -lrt
 
        - name: Update Release Version 
-         run: ./mvnw versions:set -DnewVersion=${{github.events.inputs.RELEASE_VERSION}} -DgenerateBackupPoms=false -DprocessAllModules=true
+         run: ./mvnw versions:set -DnewVersion=${{github.event.inputs.RELEASE_VERSION}} -DgenerateBackupPoms=false -DprocessAllModules=true
      
        - name: Verify Build
          run: ./mvnw clean install
@@ -41,13 +41,13 @@ jobs:
          run: |
           git add .
           git commit -m "Automated update to Release Version:: ${{ github.event.inputs.RELEASE_VERSION}}"
-          git push origin ${{github.events.inputs.BRANCH}}
+          git push origin ${{github.event.inputs.BRANCH}}
 
        - name: Create a git tag to the github repository
-         run: git tag -a "${{github.events.inputs.RELEASE_VERSION}}" -m "Release ${{github.events.inputs.RELEASE_VERSION}} created by @$GITHUB_ACTOR"
+         run: git tag -a "${{github.event.inputs.RELEASE_VERSION}}" -m "Release ${{github.event.inputs.RELEASE_VERSION}} created by @$GITHUB_ACTOR"
  
        - name: Push tag ${{github.events.inputs.RELEASE_VERSION}}
-         run: git push origin ${{github.events.inputs.RELEASE_VERSION}} 
+         run: git push origin ${{github.event.inputs.RELEASE_VERSION}} 
 
 
          
