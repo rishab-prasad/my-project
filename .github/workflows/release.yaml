@@ -25,34 +25,30 @@ jobs:
        - name: Checkout Code 
          uses: actions/checkout@v2
          with:
+           ref: ${{github.events.inputs.BRANCH}}
            token: ${{ secrets.ACCESS_TOKEN }}
+           path: code
            
        - name: list files
          run: ls -lrt
 
        - name: Update Release Version 
-         run: ./mvnw versions:set -DnewVersion=${{github.events.input.RELEASE_VERSION}} -DgenerateBackupPoms=false -DprocessAllModules=true
+         run: cd code && ./mvnw versions:set -DnewVersion=${{github.events.inputs.RELEASE_VERSION}} -DgenerateBackupPoms=false -DprocessAllModules=true
      
        - name: Verify Build
-         run: ./mvnw clean install
+         run: cd code && ./mvnw clean install
+         
+       - name: Commit Release Version Change
+         run: |
+          git add .
+          git commit -m "Automated update to Release Version:: ${{ github.event.inputs.RELEASE_VERSION}}"
+          git push origin ${{github.events.inputs.BRANCH}}
 
        - name: Create a git tag to the github repository
-         run: git tag -a "${{github.events.input.RELEASE_VERSION}}" -m "Release ${{github.events.input.RELEASE_VERSION}} created by @$GITHUB_ACTOR"
+         run: cd code && git tag -a "${{github.events.inputs.RELEASE_VERSION}}" -m "Release ${{github.events.inputs.RELEASE_VERSION}} created by @$GITHUB_ACTOR"
  
-       - name: Push tag ${{github.events.input.RELEASE_VERSION}}
-         run: git push origin ${{github.events.input.RELEASE_VERSION}} 
-
-      # - name: Commit Release Version Change
-       #  run: |
-        #  git add .
-         # git commit -m "Automated version update: ${{github.events.input.RELEASE_VERSION}}"
-          
-  #      - name: Login in dockerhub
-   #       run: docker login -u "${{secrets.DOCKERHUB_USERNAME}}"  -p "${{secrets.DOCKERHUB_PASSWORD}}" docker.io
-#
-
- #       - name: Push Images
-  #        run: docker push rishabprasad005/my-project    
+       - name: Push tag ${{github.events.inputs.RELEASE_VERSION}}
+         run: cd code && git push origin ${{github.events.inputs.RELEASE_VERSION}} 
 
 
          
