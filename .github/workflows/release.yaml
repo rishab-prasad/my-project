@@ -25,7 +25,7 @@ jobs:
        - name: Checkout Code with Ref ${{github.event.inputs.BRANCH}}
          uses: actions/checkout@v2
          with:
-           ref: 1.0
+           ref: '1.0'
            token: ${{ secrets.ACCESS_TOKEN }}
            path: my-project
            
