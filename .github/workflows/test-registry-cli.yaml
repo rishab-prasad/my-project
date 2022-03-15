@@ -7,8 +7,8 @@ on:
         required: true
         type: choice
         options:
-        - abc
-        - def
+        - yes
+        - no
   
   
 jobs:
