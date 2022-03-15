@@ -5,11 +5,10 @@ on:
     inputs:
       release-linux-cli:     
         required: true
-        default: 'no' 
         type: choice
         options:
-        - yes
-        - no
+        - abc
+        - def
   
   
 jobs:
