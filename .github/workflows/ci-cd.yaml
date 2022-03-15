@@ -8,10 +8,7 @@ on:
 jobs:
   build-project:
     runs-on: ubuntu-latest
-    steps:
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
-        
+    steps:        
       - name: Set up Docker Buildx
         id: buildx
         uses: docker/setup-buildx-action@v1
