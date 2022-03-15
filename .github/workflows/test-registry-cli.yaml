@@ -1,12 +1,21 @@
-name: Test Registry CLI Workflow
+name: Test Workflow Disptach Input Options
 
-on:
-  workflow_dispatch: {}
+on: 
+  workflow_dispatch:
+    inputs:
+      release-linux-cli:     
+        required: true
+        default: 'false' 
+        type: choice
+        options:
+        - yes
+        - no
   
   
 jobs:
   release-macos-cli:
     runs-on: macos-latest
+    if: ${{ github.event.inputs.release-linux-cli }} == "yes"
     steps:
     - name: Fetch required Details
       run: |
