@@ -5,7 +5,7 @@ on:
     inputs:
       release-linux-cli:     
         required: true
-        default: 'false' 
+        default: 'no' 
         type: choice
         options:
         - yes
