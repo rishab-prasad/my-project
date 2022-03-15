@@ -37,7 +37,7 @@ jobs:
             
       - name: Build image
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-        run: docker build -f src/main/docker/Dockerfile.jvm -t rishabprasad005/my-project .
+        run: docker buildx build -f src/main/docker/Dockerfile.jvm -t rishabprasad005/my-project:multi-arch --platform linux/amd64,linux/arm64 .
 
       - name: List images
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
@@ -49,7 +49,7 @@ jobs:
 
       - name: Push Images
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-        run: docker push rishabprasad005/my-project
+        run: docker push rishabprasad005/my-project:multi-arch
         
       - name: Google Chat Notification
         uses: Co-qn/google-chat-notification@releases/v1
