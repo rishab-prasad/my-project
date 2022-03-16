@@ -38,11 +38,11 @@ jobs:
          echo ${{github.event_name}}
          echo ${{github.ref}}
          
-      - name: Login in dockerhub
+      - name: Login in quay.io
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-        run: docker login -u "${{secrets.DOCKERHUB_USERNAME}}"  -p "${{secrets.DOCKERHUB_PASSWORD}}" quay.io
+        run: docker login -u "${{secrets.QUAY_USERNAME}}"  -p "${{secrets.QUAY_PASSWORD}}" quay.io
         
-      - name: Build image
+      - name: Build and Puh image to quay.io
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         run: docker buildx build --push -f src/main/docker/Dockerfile.jvm -t quay.io/rishabprasad005/my-project:multi-arch --platform linux/amd64,linux/arm64 .
       
@@ -50,7 +50,7 @@ jobs:
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         run: docker login -u "${{secrets.DOCKERHUB_USERNAME}}"  -p "${{secrets.DOCKERHUB_PASSWORD}}" docker.io
         
-      - name: Build image
+      - name: Build and Puh image to docker.io
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         run: docker buildx build --push -f src/main/docker/Dockerfile.jvm -t rishabprasad005/my-project:multi-arch --platform linux/amd64,linux/arm64 .
 
