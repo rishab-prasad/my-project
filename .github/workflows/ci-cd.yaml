@@ -6,12 +6,13 @@ on:
       - master
       
 env:
-  PLATFORMS: linux/amd64,linux/arm64,linux/s390x,linux/ppc64le,linux/arm/v6
+  PLATFORMS: linux/amd64,linux/arm64,linux/s390x,linux/ppc64le
   
 jobs:
   build-project:
     runs-on: ubuntu-latest
     steps:
+       # Open-Source Machine emulator that allows you to emulate multiple CPU architectures on your machine
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
         
