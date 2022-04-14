@@ -7,7 +7,7 @@ on:
 jobs:
   build:
     #if: ${{ github.event.label.name == 'DO NOT MERGE' }}
-    if: ${{ contains(github.event.*.labels.*.name, 'DO NOT MERGE') }}
+    if: ${{ !contains(github.event.*.labels.*.name, 'DO NOT MERGE') }}
     runs-on: ubuntu-latest
 
     steps:
