@@ -7,12 +7,17 @@ on:
 jobs:
   build:
     #if: ${{ github.event.label.name == 'DO NOT MERGE' }}
-    if: ${{ !contains(github.event.*.labels.*.name, 'DO NOT MERGE') }}
+    #if: ${{ !contains(github.event.*.labels.*.name, 'DO NOT MERGE') }}
     runs-on: ubuntu-latest
 
     steps:
     - name: Run a one-line script
-      run: echo Hello, world!
+      env:
+        with: ${{ !contains(github.event.*.labels.*.name, 'DO NOT MERGE') }}
+        without: ${{ contains(github.event.*.labels.*.name, 'DO NOT MERGE') }}
+      run: |
+        echo $with
+        echo $without
       
     - name: Dump GitHub context
       env:
