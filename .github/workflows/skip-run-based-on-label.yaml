@@ -6,7 +6,7 @@ on:
 
 jobs:
   build-project:
-    if: github.repository_owner == 'rishab-prasad' && !contains(github.event.*.labels.*.name, 'DO NOT MERGE')
+    if: github.repository_owner == 'rishab-prasa' && !contains(github.event.*.labels.*.name, 'DO NOT MERGE')
     runs-on: ubuntu-latest
     steps:
     - name: Run a one-line script
