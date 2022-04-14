@@ -5,11 +5,9 @@ on:
       - master
 
 jobs:
-  build:
-    #if: ${{ github.event.label.name == 'DO NOT MERGE' }}
-    #if: ${{ !contains(github.event.*.labels.*.name, 'DO NOT MERGE') }}
+  build-project:
+    if: github.repository_owner == 'rishab-prasad' && !contains(github.event.*.labels.*.name, 'DO NOT MERGE')
     runs-on: ubuntu-latest
-
     steps:
     - name: Run a one-line script
       env:
