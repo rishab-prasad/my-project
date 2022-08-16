@@ -1,0 +1,15 @@
+name: Test Workflow 
+
+on: 
+  workflow_dispatch:
+  
+  
+jobs:
+  install-syft:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repository Dispatch
+        run: curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
+        
+      - name: print syft version
+        run: syft --version
