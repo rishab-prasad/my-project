@@ -13,3 +13,13 @@ jobs:
         
       - name: print syft version
         run: syft --version
+
+      - name: Login to registry.redhat.io
+        run: docker login -u "apicurio" -p "${{ APICURIO_RED_HAT_PASSWORD }}" quay.io
+        
+      - name: Generate SBOM
+        run: |
+          syft docker:registry.redhat.io/integration/service-registry-sql-rhel8:latest -o table=sql-sbom
+          syft docker:registry.redhat.io/integration/service-registry-kafkasql-rhel8:latest -o table=kafkasql-sbom
+          syft docker:registry.redhat.io/integration/service-registry-rhel8-operator:latest -o table=operator-sbom
+          cat sql-sbom
