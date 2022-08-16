@@ -15,7 +15,7 @@ jobs:
         run: syft --version
 
       - name: Login to registry.redhat.io
-        run: docker login -u "apicurio" -p "${{ APICURIO_RED_HAT_PASSWORD }}" quay.io
+        run: docker login -u "apicurio" -p "${{ secrets.APICURIO_RED_HAT_PASSWORD }}" registry.redhat.io
         
       - name: Generate SBOM
         run: |
