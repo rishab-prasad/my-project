@@ -4,3 +4,5 @@ on-src-updated
 on-src-updated
 list-files: ''
 main
+
+           list-files: 'csv'
