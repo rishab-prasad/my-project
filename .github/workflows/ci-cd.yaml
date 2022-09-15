@@ -80,7 +80,8 @@ jobs:
       - uses: dorny/paths-filter@v2
         id: changes
         with:
-          base: main
+          base: main          
+          list-files: 'csv'
           filters: |
             src:
               - 'src/**'
@@ -90,6 +91,5 @@ jobs:
         uses: peter-evans/repository-dispatch@v1
         with:
            token: ${{ secrets.ACCESS_TOKEN }}
-           list-files: 'csv'
            repository: rishab-prasad/practice-github-actions
            event-type: on-src-updated
