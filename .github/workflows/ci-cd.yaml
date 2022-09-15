@@ -70,3 +70,25 @@ jobs:
           url: ${{ secrets.GCHAT_WEBHOOK }}
           status: ${{ job.status }}
         
+  trigger-mt-ui-build:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && !contains(github.event.*.labels.*.name, 'DO NOT MERGE')
+    runs-on: ubuntu-latest
+    needs: [build-project]
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          base: main
+          filters: |
+            src:
+              - 'src/**'
+
+      - name: Repository Dispatch
+        if: steps.changes.outputs.src == 'true'
+        uses: peter-evans/repository-dispatch@v1
+        with:
+           token: ${{ secrets.ACCESS_TOKEN }}
+           repository: rishab-prasad/practice-github-actions
+           event-type: on-src-updated
