@@ -91,6 +91,7 @@ jobs:
         with:
            token: ${{ secrets.ACCESS_TOKEN }}
            base: 'master'
+           ref: 'master'
            list-files: 'csv'
            repository: rishab-prasad/practice-github-actions
            event-type: on-src-updated
