@@ -71,7 +71,7 @@ jobs:
           status: ${{ job.status }}
         
   trigger-mt-ui-build:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && !contains(github.event.*.labels.*.name, 'DO NOT MERGE')
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master' && !contains(github.event.*.labels.*.name, 'DO NOT MERGE')
     runs-on: ubuntu-latest
     #needs: [build-project]
     steps:
